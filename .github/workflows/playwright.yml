@@ -1,24 +1,32 @@
 name: Playwright Tests
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        required: true
+        description: Environment
+        options: 
+        - STAGING
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 10
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.32.3-jammy
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: '18'
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
+    - name: Run your tests
       run: npx playwright test
+      env:
+        AUTH_TOKEN: ${{ secrets[format('{0}_TOKEN', github.event.inputs.environment)] }}
+        BASE_URL: ${{ vars[format('{0}_BASE_URL', github.event.inputs.environment)] }}
+        COOKIE_DOMAIN: ${{ vars[format('{0}_COOKIE_DOMAIN', github.event.inputs.environment)] }}
     - uses: actions/upload-artifact@v3
       if: always()
       with:
