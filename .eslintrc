@@ -1,0 +1,27 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "plugins": [
+    "prettier",
+    "@typescript-eslint",
+    "playwright",
+    "jest-playwright"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:playwright/playwright-test"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "testing-library/no-unnecessary-act": "off",
+    "curly": "error"
+  }
+}
