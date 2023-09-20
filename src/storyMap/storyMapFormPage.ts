@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import path from 'path';
 
 type StoryMapTitle = {
   title?: string;
@@ -7,6 +8,10 @@ type StoryMapTitle = {
 
 type Chapter = {
   title: string;
+};
+
+export const goToToolsPage = async (page: Page) => {
+  await page.goto('/tools');
 };
 
 export const goToCreatePage = async (page: Page) => {
@@ -21,6 +26,21 @@ export const exitPreview = async (page: Page) => {
   await page.getByRole('button', { name: 'Exit Preview' }).click();
 };
 
+export const getTitleSection = async (page: Page) => {
+  return page.getByRole('region', { name: /Title for:/i });
+};
+
+export const getChaptersNavigation = async (page: Page) => {
+  return page.getByRole('navigation', { name: 'Chapters sidebar' });
+};
+
+export const getChapterContextMenu = async (page: Page, chapterTitle: string) => {
+  const chaptersNavigation = await getChaptersNavigation(page);
+  const chapterItem = chaptersNavigation.getByRole('button', { name: chapterTitle });
+  await chapterItem.getByRole('button', { name: 'Open menu' }).click();
+  return page.getByRole('menu', { name: `${chapterTitle} menu` });
+};
+
 export const changeStoryMapTitle = async (
   page: Page,
   storyMapTitle: StoryMapTitle
@@ -30,20 +50,78 @@ export const changeStoryMapTitle = async (
       name: 'Story map title (Required)',
     });
     await titleTextbox.fill(storyMapTitle.title);
+    await titleTextbox.press('Tab');
   }
   if (storyMapTitle.subtitle) {
     const subtitleTextbox = await page.getByRole('textbox', {
       name: 'Story map subtitle',
     });
     await subtitleTextbox.fill(storyMapTitle.subtitle);
+    await subtitleTextbox.press('Tab');
   }
 };
 
-export const addChapter = async (page: Page, chapter: Chapter) => {
+export const addChapter = async (page: Page) => {
   await page.getByRole('button', { name: 'Add new chapter' }).click();
-  await page.getByPlaceholder('Chapter title').click();
-  await page.getByPlaceholder('Chapter title').fill(chapter.title);
-  await page.getByPlaceholder('Chapter title').press('Tab');
+};
+
+export const goToChapter = async (page: Page, chapterTitle: string) => {
+  const chaptersNavigation = await getChaptersNavigation(page);
+  await chaptersNavigation.getByRole('button', { name: chapterTitle }).click();
+};
+
+export const getChapter = async (page: Page, chapterTitle: string) => {
+  await goToChapter(page, chapterTitle);
+  return page.getByRole('region', { name: `Chapter: ${chapterTitle}` });
+};
+
+export const changeChapterTitle = async (
+  page: Page,
+  chapterTitle: string,
+  newChapterTitle: string
+) => {
+  const chapterComponent = await getChapter(page, chapterTitle);
+  const titleField = chapterComponent.getByPlaceholder('Chapter title');
+
+  await titleField.click();
+  await titleField.fill(newChapterTitle);
+};
+
+export const openMediaDialog = async (page: Page, chapterTitle: string) => {
+  const chapterComponent = await getChapter(page, chapterTitle);
+  const button = chapterComponent.getByRole('button', {
+    name: 'Add media',
+  });
+  await button.click();
+  // Needs 2 clicks not sure why
+  await button.click();
+};
+
+export const addMedia = async (
+  page: Page,
+  chapterTitle: string,
+  mediaUrl: string
+) => {
+  await openMediaDialog(page, chapterTitle);
+  const mediaDialog = page.getByRole('dialog', { name: 'Add media' });
+  const dropZone = mediaDialog.getByRole('button', {
+    name: 'Upload a photo or audio file Select File Accepted file formats: *.aac, *.gif, *.jpeg, *.jpg, *.mp3, *.mp4, *.png, *.wav Maximum file size: 10 MB',
+  });
+  const input = await dropZone.locator('input[type=file]');
+  await input.setInputFiles(path.join(__dirname, mediaUrl));
+  await mediaDialog.getByRole('button', { name: 'Add media' }).click();
+};
+
+export const changeChapterAlignment = async (
+  page: Page,
+  chapterTitle: string,
+  alignment: 'Left' | 'Center' | 'Right'
+) => {
+  const chapterComponent = await getChapter(page, chapterTitle);
+  const alignmentButton = chapterComponent.getByRole('button', {
+    name: alignment,
+  });
+  await alignmentButton.click();
 };
 
 export const setMapLocation = async (
@@ -60,6 +138,11 @@ export const setMapLocation = async (
   await search.type(location);
   await page.locator('a').filter({ hasText: location }).click();
   await page.getByRole('button', { name: 'Set Location' }).click();
+};
+
+export const moveChapterDown = async (page: Page, chapterTitle: string) => {
+  const chapterMenu = await getChapterContextMenu(page, chapterTitle);
+  await chapterMenu.getByRole('menuitem', { name: 'Move Chapter Down' }).click();
 };
 
 export const deleteStoryMap = async (page: Page, title: string) => {
