@@ -6,10 +6,6 @@ type StoryMapTitle = {
   subtitle?: string;
 };
 
-type Chapter = {
-  title: string;
-};
-
 export const goToToolsPage = async (page: Page) => {
   await page.goto('/tools');
 };
@@ -34,9 +30,14 @@ export const getChaptersNavigation = async (page: Page) => {
   return page.getByRole('navigation', { name: 'Chapters sidebar' });
 };
 
-export const getChapterContextMenu = async (page: Page, chapterTitle: string) => {
+export const getChapterContextMenu = async (
+  page: Page,
+  chapterTitle: string
+) => {
   const chaptersNavigation = await getChaptersNavigation(page);
-  const chapterItem = chaptersNavigation.getByRole('button', { name: chapterTitle });
+  const chapterItem = chaptersNavigation.getByRole('button', {
+    name: chapterTitle,
+  });
   await chapterItem.getByRole('button', { name: 'Open menu' }).click();
   return page.getByRole('menu', { name: `${chapterTitle} menu` });
 };
@@ -59,6 +60,25 @@ export const changeStoryMapTitle = async (
     await subtitleTextbox.fill(storyMapTitle.subtitle);
     await subtitleTextbox.press('Tab');
   }
+};
+
+export const setStoryMapLocation = async (page: Page, location: string) => {
+  const titleSection = await getTitleSection(page);
+  await titleSection.getByRole('button', { name: 'Set Map Location' }).click();
+  const search = await page.getByPlaceholder('Search');
+  await search.focus();
+  await search.type(location);
+  await page.locator('a').filter({ hasText: location }).click();
+  // Wait for the map to change
+  await page.waitForTimeout(2000); //eslint-disable-line
+};
+
+export const acceptStoryMapLocation = async (page: Page) => {
+  await page.getByRole('button', { name: 'Set Location' }).click();
+};
+
+export const cancelStoryMapLocation = async (page: Page) => {
+  await page.getByRole('button', { name: 'Cancel' }).click();
 };
 
 export const addChapter = async (page: Page) => {
@@ -85,6 +105,19 @@ export const changeChapterTitle = async (
 
   await titleField.click();
   await titleField.fill(newChapterTitle);
+};
+
+export const changeChapterDescription = async (
+  page: Page,
+  chapterTitle: string,
+  newChapterDescription: string
+) => {
+  const chapterComponent = await getChapter(page, chapterTitle);
+  const descriptionField = chapterComponent.getByRole('textbox', {
+    name: 'Chapter description',
+  });
+  await descriptionField.getByRole('paragraph').click();
+  await descriptionField.fill(newChapterDescription);
 };
 
 export const openMediaDialog = async (page: Page, chapterTitle: string) => {
@@ -124,7 +157,7 @@ export const changeChapterAlignment = async (
   await alignmentButton.click();
 };
 
-export const setMapLocation = async (
+export const setChapterMapLocation = async (
   page: Page,
   chapterTitle: string,
   location: string
@@ -142,7 +175,39 @@ export const setMapLocation = async (
 
 export const moveChapterDown = async (page: Page, chapterTitle: string) => {
   const chapterMenu = await getChapterContextMenu(page, chapterTitle);
-  await chapterMenu.getByRole('menuitem', { name: 'Move Chapter Down' }).click();
+  await chapterMenu
+    .getByRole('menuitem', { name: 'Move Chapter Down' })
+    .click();
+  // Wait for the move animation to complete
+  await page.waitForTimeout(500); //eslint-disable-line
+};
+
+export const dragChapter = async (
+  page: Page,
+  chapterTitle: string,
+  targetChapterTitle: string
+) => {
+  const chaptersNavigation = await getChaptersNavigation(page);
+  const chapterItem = chaptersNavigation.getByRole('button', {
+    name: chapterTitle,
+  });
+  const targetChapterItem = chaptersNavigation.getByRole('button', {
+    name: targetChapterTitle,
+  });
+  const targetBoundingBox = await targetChapterItem.boundingBox();
+  if (!targetBoundingBox) {
+    throw new Error('Target chapter not found');
+  }
+  await chapterItem.hover();
+  await page.mouse.down();
+  await page.mouse.move(
+    targetBoundingBox.x + targetBoundingBox.width / 2,
+    targetBoundingBox.y + targetBoundingBox.height / 2,
+    { steps: 10 }
+  );
+  await page.mouse.up();
+  // // Wait for the move animation to complete
+  await page.waitForTimeout(500); //eslint-disable-line
 };
 
 export const deleteStoryMap = async (page: Page, title: string) => {
