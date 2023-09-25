@@ -62,10 +62,13 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   const mapRegionBoundingBox = await mapRegion.boundingBox();
   expect(mapRegionBoundingBox).not.toBeNull();
 
-  await expect(page).toHaveScreenshot('Story-Map-Create-a-story-map-set-map.png', {
-    maxDiffPixelRatio: 0.01,
-    clip: mapRegionBoundingBox,
-  });
+  await expect(page).toHaveScreenshot(
+    'Story-Map-Create-a-story-map-set-map.png',
+    {
+      maxDiffPixelRatio: 0.01,
+      clip: mapRegionBoundingBox,
+    }
+  );
   // User aborts seting a location
   await cancelStoryMapLocation(page);
 
@@ -140,9 +143,12 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   // User Previews story map
   await goToPreview(page);
   await expect(await getChaptersNavigation(page)).toBeHidden();
-  await expect(page).toHaveScreenshot('Story-Map-Create-a-story-map-preview-page.png', {
-    maxDiffPixelRatio: 0.01,
-  });
+  await expect(page).toHaveScreenshot(
+    'Story-Map-Create-a-story-map-preview-page.png',
+    {
+      maxDiffPixelRatio: 0.01,
+    }
+  );
   await exitPreview(page);
 
   // User Publishes story map
