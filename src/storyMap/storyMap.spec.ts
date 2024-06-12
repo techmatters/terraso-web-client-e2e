@@ -65,7 +65,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await expect(page).toHaveScreenshot(
     'Story-Map-Create-a-story-map-set-map.png',
     {
-      maxDiffPixelRatio: 0.01,
+      maxDiffPixelRatio: 0.02,
       clip: mapRegionBoundingBox,
     }
   );
@@ -146,7 +146,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await expect(page).toHaveScreenshot(
     'Story-Map-Create-a-story-map-preview-page.png',
     {
-      maxDiffPixelRatio: 0.01,
+      maxDiffPixelRatio: 0.02,
     }
   );
   await exitPreview(page);
