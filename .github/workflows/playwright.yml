@@ -39,8 +39,8 @@ jobs:
         BASE_URL: ${{ vars[format('{0}_BASE_URL', env.ENVIRONMENT)] }}
         COOKIE_DOMAIN: ${{ vars[format('{0}_COOKIE_DOMAIN', env.ENVIRONMENT)] }}
         ADMIN_URL: ${{ vars[format('{0}_ADMIN_URL', env.ENVIRONMENT)] }}
-        ADMIN_USERNAME: ${{ vars[format('{0}_ADMIN_USERNAME', env.ENVIRONMENT)] }}
-        ADMIN_PASSWORD: ${{ vars[format('{0}_ADMIN_PASSWORD', env.ENVIRONMENT)] }}
+        ADMIN_USERNAME: ${{ secrets[format('{0}_ADMIN_USERNAME', env.ENVIRONMENT)] }}
+        ADMIN_PASSWORD: ${{ secrets[format('{0}_ADMIN_PASSWORD', env.ENVIRONMENT)] }}
     - uses: actions/upload-artifact@v3
       if: always()
       with:
