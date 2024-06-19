@@ -14,7 +14,7 @@ export const setAppereance = async (
   shape: string,
   size: string,
   color: string,
-  opacity: string
+  opacity?: string
 ) => {
   await page.getByRole('button', { name: shape }).click();
 
@@ -24,8 +24,10 @@ export const setAppereance = async (
   const colorField = page.getByLabel('Color');
   await colorField.fill(color);
 
-  const opacityField = page.getByLabel('Opacity');
-  await opacityField.fill(opacity);
+  if (opacity) {
+    const opacityField = page.getByLabel('Opacity');
+    await opacityField.fill(opacity);
+  }
 };
 
 export const changeBaseMap = async (page: Page, baseMap: string) => {
@@ -46,4 +48,20 @@ export const setDescription = async (page: Page, description: string) => {
 
 export const zoomIn = async (page: Page) => {
   await page.getByRole('button', { name: 'Zoom in' }).click();
+};
+
+export const setDataColumnsOption = async (page: Page, option: string) => {
+  await page.getByRole('radio', { name: option }).click();
+};
+
+export const setDataColumnsHeaders = async (
+  page: Page,
+  headers: { [key: string]: string }
+) => {
+  // await page.getByPlaceholder('socio_clave_busqueda').click();
+  // await page.getByPlaceholder('socio_clave_busqueda').fill('Jose');
+  for (const [key, value] of Object.entries(headers)) {
+    const field = await page.getByPlaceholder(key);
+    await field.fill(value);
+  }
 };
