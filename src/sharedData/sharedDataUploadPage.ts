@@ -30,7 +30,7 @@ export const addFile = async (page: Page, url: string, name: string) => {
   const dropZone = page.getByRole('button', {
     name: `Accepted file formats: ${FILE_FORMATS_TEXT} Maximum file size: 50 MB`,
   });
-  const input = await dropZone.locator('input[type=file]');
+  const input = dropZone.locator('input[type=file]');
   await input.setInputFiles(path.join(__dirname, url));
 
   const nameField = page.getByLabel('File Name');

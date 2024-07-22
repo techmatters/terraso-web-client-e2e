@@ -32,7 +32,7 @@ export const getChaptersNavigation = async (page: Page) => {
 
 export const getChapterContextMenu = async (
   page: Page,
-  chapterTitle: string
+  chapterTitle: string,
 ) => {
   const chaptersNavigation = await getChaptersNavigation(page);
   const chapterItem = chaptersNavigation.getByRole('button', {
@@ -44,17 +44,17 @@ export const getChapterContextMenu = async (
 
 export const changeStoryMapTitle = async (
   page: Page,
-  storyMapTitle: StoryMapTitle
+  storyMapTitle: StoryMapTitle,
 ) => {
   if (storyMapTitle.title) {
-    const titleTextbox = await page.getByRole('textbox', {
+    const titleTextbox = page.getByRole('textbox', {
       name: 'Story map title (Required)',
     });
     await titleTextbox.fill(storyMapTitle.title);
     await titleTextbox.press('Tab');
   }
   if (storyMapTitle.subtitle) {
-    const subtitleTextbox = await page.getByRole('textbox', {
+    const subtitleTextbox = page.getByRole('textbox', {
       name: 'Story map subtitle',
     });
     await subtitleTextbox.fill(storyMapTitle.subtitle);
@@ -65,7 +65,7 @@ export const changeStoryMapTitle = async (
 export const setStoryMapLocation = async (page: Page, location: string) => {
   const titleSection = await getTitleSection(page);
   await titleSection.getByRole('button', { name: 'Set Map Location' }).click();
-  const search = await page.getByPlaceholder('Search');
+  const search = page.getByPlaceholder('Search');
   await search.focus();
   await search.type(location);
   await page.locator('a').filter({ hasText: location }).click();
@@ -98,7 +98,7 @@ export const getChapter = async (page: Page, chapterTitle: string) => {
 export const changeChapterTitle = async (
   page: Page,
   chapterTitle: string,
-  newChapterTitle: string
+  newChapterTitle: string,
 ) => {
   const chapterComponent = await getChapter(page, chapterTitle);
   const titleField = chapterComponent.getByPlaceholder('Chapter title');
@@ -110,7 +110,7 @@ export const changeChapterTitle = async (
 export const changeChapterDescription = async (
   page: Page,
   chapterTitle: string,
-  newChapterDescription: string
+  newChapterDescription: string,
 ) => {
   const chapterComponent = await getChapter(page, chapterTitle);
   const descriptionField = chapterComponent.getByRole('textbox', {
@@ -133,14 +133,14 @@ export const openMediaDialog = async (page: Page, chapterTitle: string) => {
 export const addMedia = async (
   page: Page,
   chapterTitle: string,
-  mediaUrl: string
+  mediaUrl: string,
 ) => {
   await openMediaDialog(page, chapterTitle);
   const mediaDialog = page.getByRole('dialog', { name: 'Add media' });
   const dropZone = mediaDialog.getByRole('button', {
     name: 'Upload a photo or audio file Select File Accepted file formats: *.aac, *.gif, *.jpeg, *.jpg, *.mp3, *.mp4, *.png, *.wav Maximum file size: 10 MB',
   });
-  const input = await dropZone.locator('input[type=file]');
+  const input = dropZone.locator('input[type=file]');
   await input.setInputFiles(path.join(__dirname, mediaUrl));
   await mediaDialog.getByRole('button', { name: 'Add media' }).click();
 };
@@ -148,7 +148,7 @@ export const addMedia = async (
 export const changeChapterAlignment = async (
   page: Page,
   chapterTitle: string,
-  alignment: 'Left' | 'Center' | 'Right'
+  alignment: 'Left' | 'Center' | 'Right',
 ) => {
   const chapterComponent = await getChapter(page, chapterTitle);
   const alignmentButton = chapterComponent.getByRole('button', {
@@ -160,13 +160,13 @@ export const changeChapterAlignment = async (
 export const setChapterMapLocation = async (
   page: Page,
   chapterTitle: string,
-  location: string
+  location: string,
 ) => {
   await page
     .getByRole('region', { name: `Chapter: ${chapterTitle}` })
     .getByRole('button', { name: 'Set Map Location' })
     .click();
-  const search = await page.getByPlaceholder('Search');
+  const search = page.getByPlaceholder('Search');
   await search.focus();
   await search.type(location);
   await page.locator('a').filter({ hasText: location }).click();
@@ -185,7 +185,7 @@ export const moveChapterDown = async (page: Page, chapterTitle: string) => {
 export const dragChapter = async (
   page: Page,
   chapterTitle: string,
-  targetChapterTitle: string
+  targetChapterTitle: string,
 ) => {
   const chaptersNavigation = await getChaptersNavigation(page);
   const chapterItem = chaptersNavigation.getByRole('button', {
@@ -203,7 +203,7 @@ export const dragChapter = async (
   await page.mouse.move(
     targetBoundingBox.x + targetBoundingBox.width / 2,
     targetBoundingBox.y + targetBoundingBox.height / 2,
-    { steps: 10 }
+    { steps: 10 },
   );
   await page.mouse.up();
   // // Wait for the move animation to complete

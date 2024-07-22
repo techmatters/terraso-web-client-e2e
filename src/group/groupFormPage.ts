@@ -11,7 +11,7 @@ export const goToUpdatePage = async (page: Page, slug: string) => {
 export const changeTextField = async (
   page: Page,
   field: string,
-  value: string
+  value: string,
 ) => {
   const titleField = page.getByLabel(field);
   await titleField.click();

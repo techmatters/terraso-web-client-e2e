@@ -38,12 +38,12 @@ const test = baseTest.extend({
     await changeStoryMapTitle(page, { title: storyMapTitle });
     const titleSection = await getTitleSection(page);
     await expect(
-      titleSection.getByRole('heading', { name: storyMapTitle })
+      titleSection.getByRole('heading', { name: storyMapTitle }),
     ).toBeVisible();
 
     await saveDraft(page);
     await expect(
-      page.getByText(`${storyMapTitle} story map has been saved.`)
+      page.getByText(`${storyMapTitle} story map has been saved.`),
     ).toBeVisible();
     await use({ title: storyMapTitle });
     await deleteStoryMap(page, storyMapTitle);
@@ -58,7 +58,7 @@ test.beforeEach(async ({ context }) => {
 test('Story Map: Create a story map', async ({ page, storyMap }) => {
   // User sets a location
   await setStoryMapLocation(page, 'Quito Pichincha, Ecuador');
-  const mapRegion = await page.getByRole('region', { name: 'Map' });
+  const mapRegion = page.getByRole('region', { name: 'Map' });
   const mapRegionBoundingBox = await mapRegion.boundingBox();
   expect(mapRegionBoundingBox).not.toBeNull();
 
@@ -67,7 +67,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
     {
       maxDiffPixelRatio: 0.02,
       clip: mapRegionBoundingBox,
-    }
+    },
   );
   // User aborts seting a location
   await cancelStoryMapLocation(page);
@@ -76,33 +76,33 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await addChapter(page);
   const chaptersNavigation = await getChaptersNavigation(page);
   await expect(
-    chaptersNavigation.getByRole('button', { name: 'Untitled' })
+    chaptersNavigation.getByRole('button', { name: 'Untitled' }),
   ).toBeVisible();
 
   // Add title to chapter
   await changeChapterTitle(page, 'Untitled', 'Chapter 1');
   await expect(
-    chaptersNavigation.getByRole('button', { name: 'Chapter 1' })
+    chaptersNavigation.getByRole('button', { name: 'Chapter 1' }),
   ).toBeVisible();
 
   // Add picture, movie, audio to chapter
   await addMedia(page, 'Chapter 1', 'files/quito.jpeg');
   await expect(
-    (
-      await getChapter(page, 'Chapter 1')
-    ).getByRole('img', { name: 'Chapter media' })
+    (await getChapter(page, 'Chapter 1')).getByRole('img', {
+      name: 'Chapter media',
+    }),
   ).toBeVisible();
 
   // Add text to chapter
   await changeChapterDescription(
     page,
     'Chapter 1',
-    'This is a test description'
+    'This is a test description',
   );
   await expect(
-    (
-      await getChapter(page, 'Chapter 1')
-    ).getByRole('textbox', { name: 'Chapter description' })
+    (await getChapter(page, 'Chapter 1')).getByRole('textbox', {
+      name: 'Chapter description',
+    }),
   ).toBeVisible();
 
   // Add alignment to chapter
@@ -137,7 +137,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   // User saves draft
   await saveDraft(page);
   await expect(
-    page.getByText(`${storyMap.title} story map has been updated.`)
+    page.getByText(`${storyMap.title} story map has been updated.`),
   ).toBeVisible();
 
   // User Previews story map
@@ -147,7 +147,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
     'Story-Map-Create-a-story-map-preview-page.png',
     {
       maxDiffPixelRatio: 0.02,
-    }
+    },
   );
   await exitPreview(page);
 
@@ -162,25 +162,37 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await moveChapterDown(page, 'Chapter 1');
   const list = (await getChaptersNavigation(page)).getByRole('list');
   await expect(
-    list.getByRole('listitem').nth(0).getByRole('button', { name: 'Chapter 2' })
+    list
+      .getByRole('listitem')
+      .nth(0)
+      .getByRole('button', { name: 'Chapter 2' }),
   ).toBeVisible();
   await expect(
-    list.getByRole('listitem').nth(1).getByRole('button', { name: 'Chapter 1' })
+    list
+      .getByRole('listitem')
+      .nth(1)
+      .getByRole('button', { name: 'Chapter 1' }),
   ).toBeVisible();
 
   // User reorders chapter - drag and drop
   await dragChapter(page, 'Chapter 2', 'Chapter 1');
   await expect(
-    list.getByRole('listitem').nth(0).getByRole('button', { name: 'Chapter 1' })
+    list
+      .getByRole('listitem')
+      .nth(0)
+      .getByRole('button', { name: 'Chapter 1' }),
   ).toBeVisible();
   await expect(
-    list.getByRole('listitem').nth(1).getByRole('button', { name: 'Chapter 2' })
+    list
+      .getByRole('listitem')
+      .nth(1)
+      .getByRole('button', { name: 'Chapter 2' }),
   ).toBeVisible();
 
   // User tries to move chapter beyond title card
   const chapter1Menu = await getChapterContextMenu(page, 'Chapter 1');
   await expect(
-    chapter1Menu.getByRole('menuitem', { name: 'Move Chapter Up' })
+    chapter1Menu.getByRole('menuitem', { name: 'Move Chapter Up' }),
   ).toBeHidden();
   await page.click('body');
 
@@ -188,6 +200,6 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await goToChapter(page, 'Chapter 2');
   const chapter2Menu = await getChapterContextMenu(page, 'Chapter 2');
   await expect(
-    chapter2Menu.getByRole('menuitem', { name: 'Move Chapter Down' })
+    chapter2Menu.getByRole('menuitem', { name: 'Move Chapter Down' }),
   ).toBeHidden();
 });
