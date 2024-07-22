@@ -1,15 +1,11 @@
 {
   "name": "terraso-web-client-e2e",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "lint-js": "eslint ./ --ext .js --ext .ts --ext .tsx --max-warnings 0 --ignore-pattern node_modules/ --ignore-pattern build/",
     "format-js": "npm run lint-js -- --fix"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.44.1",
     "@types/node": "^20.14.6"
