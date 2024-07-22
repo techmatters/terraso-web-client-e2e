@@ -21,12 +21,12 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.32.3-jammy
+      image: mcr.microsoft.com/playwright:v1.44.1-jammy
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 20
     - name: Install dependencies
       run: npm ci
     - name: Environment
@@ -38,6 +38,9 @@ jobs:
         AUTH_TOKEN: ${{ secrets[format('{0}_TOKEN', env.ENVIRONMENT)] }}
         BASE_URL: ${{ vars[format('{0}_BASE_URL', env.ENVIRONMENT)] }}
         COOKIE_DOMAIN: ${{ vars[format('{0}_COOKIE_DOMAIN', env.ENVIRONMENT)] }}
+        ADMIN_URL: ${{ vars[format('{0}_ADMIN_URL', env.ENVIRONMENT)] }}
+        ADMIN_USERNAME: ${{ secrets[format('{0}_ADMIN_USERNAME', env.ENVIRONMENT)] }}
+        ADMIN_PASSWORD: ${{ secrets[format('{0}_ADMIN_PASSWORD', env.ENVIRONMENT)] }}
     - uses: actions/upload-artifact@v3
       if: always()
       with:

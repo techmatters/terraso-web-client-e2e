@@ -38,7 +38,7 @@ export const getChapterContextMenu = async (
   const chapterItem = chaptersNavigation.getByRole('button', {
     name: chapterTitle,
   });
-  await chapterItem.getByRole('button', { name: 'Open menu' }).click();
+  await chapterItem.getByRole('button', { name: 'More options' }).click();
   return page.getByRole('menu', { name: `${chapterTitle} menu` });
 };
 
