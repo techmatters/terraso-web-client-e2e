@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint-js": "eslint ./ --fix --ext .js --ext .ts --ext .tsx --max-warnings 0 --ignore-pattern node_modules/ --ignore-pattern build/"
+    "lint-js": "eslint ./ --ext .js --ext .ts --ext .tsx --max-warnings 0 --ignore-pattern node_modules/ --ignore-pattern build/",
+    "format-js": "npm run lint-js -- --fix"
   },
   "keywords": [],
   "author": "",
