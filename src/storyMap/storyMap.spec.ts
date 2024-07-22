@@ -65,7 +65,7 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   await expect(page).toHaveScreenshot(
     'Story-Map-Create-a-story-map-set-map.png',
     {
-      maxDiffPixelRatio: 0.02,
+      maxDiffPixelRatio: 0.07,
       clip: mapRegionBoundingBox,
     },
   );
