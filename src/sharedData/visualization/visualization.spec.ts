@@ -199,6 +199,7 @@ const testVisualizationForm = async ({
   );
 };
 
+// eslint-disable-next-line playwright/expect-expect
 test('Visualization: Create a map (GIS)', async ({ page, sharedDataGis }) => {
   await testVisualizationForm({
     page,
@@ -214,6 +215,7 @@ test('Visualization: Create a map (GIS)', async ({ page, sharedDataGis }) => {
   });
 });
 
+// eslint-disable-next-line playwright/expect-expect
 test('Visualization: Create a map (Data set)', async ({
   page,
   sharedDataDataSet,
