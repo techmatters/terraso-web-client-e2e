@@ -7,7 +7,7 @@ export const goToPage = async (page: Page) => {
 };
 
 export const showAllGroups = async (page: Page) => {
-  const showAll = await page.getByRole('link', { name: 'Show all' });
+  const showAll = page.getByRole('link', { name: 'Show all' });
   if ((await showAll.count()) > 0) {
     await showAll.click();
   }

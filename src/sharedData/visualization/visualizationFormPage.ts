@@ -14,7 +14,7 @@ export const setAppereance = async (
   shape: string,
   size: string,
   color: string,
-  opacity?: string
+  opacity?: string,
 ) => {
   await page.getByRole('button', { name: shape }).click();
 
@@ -32,7 +32,7 @@ export const setAppereance = async (
 
 export const changeBaseMap = async (page: Page, baseMap: string) => {
   await page.getByRole('button', { name: 'Base map' }).click();
-  const menu = await page.getByRole('menu', { name: 'Base map' });
+  const menu = page.getByRole('menu', { name: 'Base map' });
   await menu.getByRole('menuitem', { name: baseMap, exact: true }).click();
 };
 
@@ -56,12 +56,12 @@ export const setDataColumnsOption = async (page: Page, option: string) => {
 
 export const setDataColumnsHeaders = async (
   page: Page,
-  headers: { [key: string]: string }
+  headers: { [key: string]: string },
 ) => {
   // await page.getByPlaceholder('socio_clave_busqueda').click();
   // await page.getByPlaceholder('socio_clave_busqueda').fill('Jose');
   for (const [key, value] of Object.entries(headers)) {
-    const field = await page.getByPlaceholder(key);
+    const field = page.getByPlaceholder(key);
     await field.fill(value);
   }
 };

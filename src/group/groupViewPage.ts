@@ -7,7 +7,7 @@ export const goToPage = async (page: Page, slug: string) => {
 export const deleteSharedData = async (
   page: Page,
   groupSlug: string,
-  name: string
+  name: string,
 ) => {
   await goToPage(page, groupSlug);
   await page.getByRole('button', { name: `Delete file “${name}”.` }).click();

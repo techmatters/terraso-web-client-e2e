@@ -20,7 +20,7 @@ const test = baseTest.extend({
     await groupFormPage.changeTextField(
       page,
       'Description',
-      'Test Description'
+      'Test Description',
     );
     await groupFormPage.createGroup(page);
 
@@ -34,7 +34,7 @@ const test = baseTest.extend({
     await sharedDataUploadPage.addFile(
       page,
       'files/BARRANCOS_MANCHENO.kmz',
-      name
+      name,
     );
     await use({
       type: 'GIS',
@@ -105,10 +105,10 @@ const testVisualizationForm = async ({
 
   // Data
   if (steps.data) {
-    const latitude = await page.getByRole('combobox', {
+    const latitude = page.getByRole('combobox', {
       name: /latitude\(required\)/i,
     });
-    const longitude = await page.getByRole('combobox', {
+    const longitude = page.getByRole('combobox', {
       name: /longitude\(required\)/i,
     });
     await expect(latitude).toHaveText(steps.data.latitude);
@@ -123,11 +123,11 @@ const testVisualizationForm = async ({
     steps.appereance.shape,
     steps.appereance.size,
     steps.appereance.color,
-    steps.appereance.opacity
+    steps.appereance.opacity,
   );
   await visualizationFormPage.changeBaseMap(page, 'Streets and topography');
-  const previewRegion = await page.getByRole('region', { name: 'Preview' });
-  const mapRegion = await previewRegion.getByRole('region', { name: 'Map' });
+  const previewRegion = page.getByRole('region', { name: 'Preview' });
+  const mapRegion = previewRegion.getByRole('region', { name: 'Map' });
   const mapRegionBoundingBox = await mapRegion.boundingBox();
   expect(mapRegionBoundingBox).not.toBeNull();
   await expect(page).toHaveScreenshot(
@@ -135,7 +135,7 @@ const testVisualizationForm = async ({
     {
       maxDiffPixelRatio: 0.02,
       clip: mapRegionBoundingBox,
-    }
+    },
   );
   await page.getByRole('button', { name: 'Next' }).click();
 
@@ -145,11 +145,11 @@ const testVisualizationForm = async ({
   if (steps?.annotations?.headers) {
     await visualizationFormPage.setDataColumnsHeaders(
       page,
-      steps.annotations.headers
+      steps.annotations.headers,
     );
     for (const value of Object.values(steps.annotations.headers)) {
       await expect(page.getByRole('region', { name: 'Preview' })).toContainText(
-        value
+        value,
       );
     }
   }
@@ -161,7 +161,7 @@ const testVisualizationForm = async ({
     {
       maxDiffPixelRatio: 0.02,
       clip: await page.getByRole('main').boundingBox(),
-    }
+    },
   );
 
   // Change viewport
@@ -173,13 +173,13 @@ const testVisualizationForm = async ({
     {
       maxDiffPixelRatio: 0.03,
       clip: await page.getByRole('region', { name: 'Map' }).boundingBox(),
-    }
+    },
   );
 
   // Publish
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(
-    page.getByText(`The map for ${sharedData.name} file has been published.`)
+    page.getByText(`The map for ${sharedData.name} file has been published.`),
   ).toBeVisible();
 
   // View page
@@ -195,7 +195,7 @@ const testVisualizationForm = async ({
   ]);
   expect(download.suggestedFilename()).toBe(sharedData.filename);
   expect((await fs.promises.stat((await download.path()) as string)).size).toBe(
-    sharedData.fileSize
+    sharedData.fileSize,
   );
 };
 
