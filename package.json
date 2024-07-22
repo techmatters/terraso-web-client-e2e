@@ -20,7 +20,7 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
-    "uuid": "^9.0.0"
+    "uuid": "^10.0.0"
   },
   "engines": {
     "node": ">=18"
