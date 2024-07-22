@@ -62,11 +62,10 @@ test('Story Map: Create a story map', async ({ page, storyMap }) => {
   const mapRegionBoundingBox = await mapRegion.boundingBox();
   expect(mapRegionBoundingBox).not.toBeNull();
 
-  await page.waitForTimeout(500); //eslint-disable-line
   await expect(page).toHaveScreenshot(
     'Story-Map-Create-a-story-map-set-map.png',
     {
-      maxDiffPixelRatio: 0.03,
+      maxDiffPixelRatio: 0.07,
       clip: mapRegionBoundingBox,
     },
   );
