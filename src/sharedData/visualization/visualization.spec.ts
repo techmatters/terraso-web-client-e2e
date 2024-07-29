@@ -169,7 +169,7 @@ const testVisualizationForm = async ({
   await visualizationFormPage.zoomIn(page);
   await visualizationFormPage.zoomIn(page);
 
-  await page.waitForTimeout(500); //eslint-disable-line
+  await page.waitForTimeout(500); // eslint-disable-line playwright/no-wait-for-timeout
   await expect(page).toHaveScreenshot(
     `Visualization-Create-a-map-${sharedData.type}-preview-zoom-change.png`,
     {
