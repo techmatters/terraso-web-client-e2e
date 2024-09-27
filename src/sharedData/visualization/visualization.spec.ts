@@ -187,7 +187,7 @@ const testVisualizationForm = async ({
   // View page
   const url = new URL(page.url());
   const expectedPattern = new RegExp(
-    `//groups/${group.slug}/map/[\\w-]+/pw-map-${visualizationSlug}/`,
+    `/groups/${group.slug}/map/[\\w-]+/${visualizationSlug}`,
   );
   expect(url.pathname).toMatch(expectedPattern);
   await visualizationFormPage.changeBaseMap(page, 'Satellite');

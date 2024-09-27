@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "lint-js": "eslint ./ --ext .js --ext .ts --ext .tsx --max-warnings 0 --ignore-pattern node_modules/ --ignore-pattern build/",
+    "lint-js": "eslint ./ --ext .js --ext .ts --ext .tsx --max-warnings 0 --ignore-pattern \"node_modules/, playwright-report/\" --ignore-pattern build/",
     "format-js": "npm run lint-js -- --fix"
   },
   "devDependencies": {
