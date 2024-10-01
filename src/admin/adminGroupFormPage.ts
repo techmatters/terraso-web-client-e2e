@@ -12,7 +12,7 @@ export const confirmRemove = async (page: Page) => {
 
 export const removeGroup = async (page: Page, groupName: string) => {
   await groupListPage.goToPage(page);
-  await groupListPage.showAllGroups(page);
+  await groupListPage.showLatestGroups(page);
   await groupListPage.openGroup(page, groupName);
   await remove(page);
   await confirmRemove(page);

@@ -137,6 +137,7 @@ const testVisualizationForm = async ({
       clip: mapRegionBoundingBox,
     },
   );
+
   await page.getByRole('button', { name: 'Next' }).click();
 
   // Annotations
@@ -186,8 +187,10 @@ const testVisualizationForm = async ({
 
   // View page
   const url = new URL(page.url());
-  const expectedPathname = `/groups/${group.slug}/map/${visualizationSlug}`;
-  expect(url.pathname).toBe(expectedPathname);
+  const expectedPattern = new RegExp(
+    `/groups/${group.slug}/map/[\\w-]+/${visualizationSlug}`,
+  );
+  expect(url.pathname).toMatch(expectedPattern);
   await visualizationFormPage.changeBaseMap(page, 'Satellite');
 
   // Download file
