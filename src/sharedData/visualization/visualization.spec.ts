@@ -137,6 +137,7 @@ const testVisualizationForm = async ({
       clip: mapRegionBoundingBox,
     },
   );
+  
   await page.getByRole('button', { name: 'Next' }).click();
 
   // Annotations
